@@ -33,3 +33,11 @@ GitHub `main` → AWS Amplify (`d20m2d5muyyri8`, us-east-1) → `starknet.aravin
 ## Privacy
 
 Public roles/capabilities only. No credentials, IPs, or personal data.
+
+## Local preview (before commit)
+
+```bash
+cd ~/Desktop/workbench/stark-net
+./preview.sh
+# http://127.0.0.1:8765/
+```
