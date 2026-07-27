@@ -10,9 +10,9 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;0,900;1,700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
 <style>
   :root{
-    --cyan:#3de7ff;       /* JARVIS hologram cyan */
-    --cyan-deep:#0aa8c4;
-    --gold:#a8e7ff;       /* soft holo highlight */
+    --cyan:#f0b429;       /* JARVIS hologram amber-gold */
+    --cyan-deep:#c4841d;
+    --gold:#ffe08a;       /* soft holo highlight */
     --ink:#0c0c0d;        /* near-black */
     --ink-2:#141416;
     --panel:#1a1a1d;
@@ -41,7 +41,7 @@
   nav .wrap{display:flex;align-items:center;justify-content:space-between;height:64px}
   .brand{display:flex;align-items:center;gap:12px;font-weight:700;letter-spacing:.22em;font-size:14px}
   .reactor{width:18px;height:18px;border-radius:50%;background:radial-gradient(circle,#fff 0%,var(--cyan) 35%,var(--cyan-deep) 75%);
-    box-shadow:0 0 12px var(--cyan),0 0 22px rgba(61,231,255,.45);animation:pulse 2.4s ease-in-out infinite}
+    box-shadow:0 0 12px var(--cyan),0 0 22px rgba(240,180,41,.45);animation:pulse 2.4s ease-in-out infinite}
   @keyframes pulse{0%,100%{opacity:.75;transform:scale(.94)}50%{opacity:1;transform:scale(1.06)}}
   .nav-links{display:flex;gap:26px;font-size:12px;letter-spacing:.18em}
   .nav-links a{color:var(--mute);transition:color .2s}
@@ -65,7 +65,7 @@
   .btn.ghost:hover{border-color:var(--red);color:var(--red)}
   .hero-art{position:relative}
   .hero-art img{width:100%;max-width:440px;margin:0 auto;display:block;
-    filter:drop-shadow(0 0 40px rgba(61,231,255,.35))}
+    filter:drop-shadow(0 0 40px rgba(240,180,41,.4))}
 
   /* STAT STRIP */
   .stats{border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin-top:40px}
@@ -174,7 +174,7 @@
       </div>
     </div>
     <div class="hero-art">
-      <img src="assets/hero.png" alt="JARVIS holographic interface — Age of Ultron style wireframe face" />
+      <img src="assets/hero.png" alt="JARVIS holographic sphere interface — Age of Ultron golden orb" />
     </div>
   </div>
 </header>
