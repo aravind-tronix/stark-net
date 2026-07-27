@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>STARK-NET — The Jarvis AI Roster</title>
+<meta name="description" content="Development-stage dashboard for the Stark AI roster — Jarvis, EDITH, Friday and Dummy — built on Hermes with Claude & Grok MCP roadmap." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;0,900;1,700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --red:#d42b1e;        /* hot-rod red */
+    --red-deep:#8f1610;
+    --gold:#f5c542;       /* arc-reactor gold */
+    --ink:#0c0c0d;        /* near-black */
+    --ink-2:#141416;
+    --panel:#1a1a1d;
+    --line:#2a2a2e;
+    --paper:#f4f1ea;      /* inverted section */
+    --mute:#9a9aa2;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--ink);color:#efece6;
+    font-family:"JetBrains Mono",monospace;
+    -webkit-font-smoothing:antialiased;overflow-x:hidden;
+  }
+  .serif{font-family:"Playfair Display",Georgia,serif}
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 28px}
+  .mono-label{font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:var(--mute)}
+
+  /* NAV */
+  nav{position:sticky;top:0;z-index:50;background:rgba(12,12,13,.82);
+    backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+  nav .wrap{display:flex;align-items:center;justify-content:space-between;height:64px}
+  .brand{display:flex;align-items:center;gap:12px;font-weight:700;letter-spacing:.22em;font-size:14px}
+  .reactor{width:18px;height:18px;border-radius:50%;background:radial-gradient(circle,#fff 0%,var(--gold) 30%,var(--red) 70%);
+    box-shadow:0 0 12px var(--red),0 0 22px rgba(212,43,30,.5);animation:pulse 2.4s ease-in-out infinite}
+  @keyframes pulse{0%,100%{opacity:.75;transform:scale(.94)}50%{opacity:1;transform:scale(1.06)}}
+  .nav-links{display:flex;gap:26px;font-size:12px;letter-spacing:.18em}
+  .nav-links a{color:var(--mute);transition:color .2s}
+  .nav-links a:hover{color:var(--red)}
+  @media(max-width:720px){.nav-links{display:none}}
+
+  /* HERO */
+  header{position:relative;padding:74px 0 40px;overflow:hidden}
+  .hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:40px;align-items:center}
+  @media(max-width:860px){.hero-grid{grid-template-columns:1fr;text-align:left}}
+  .tag{display:inline-block;border:1px solid var(--red);color:var(--red);
+    padding:6px 12px;font-size:10.5px;letter-spacing:.24em;margin-bottom:22px}
+  h1.hero{font-size:clamp(48px,8vw,104px);line-height:.92;font-weight:900;letter-spacing:-.01em}
+  h1.hero em{font-style:italic;color:var(--red)}
+  .sub{margin-top:22px;max-width:440px;color:#c9c6c0;font-size:14px;line-height:1.7}
+  .cta{margin-top:30px;display:flex;gap:14px;flex-wrap:wrap}
+  .btn{border:1px solid var(--line);padding:13px 20px;font-size:12px;letter-spacing:.14em;
+    text-transform:uppercase;transition:.2s;display:inline-flex;gap:8px;align-items:center}
+  .btn.primary{background:var(--red);border-color:var(--red);color:#fff}
+  .btn.primary:hover{background:var(--red-deep);border-color:var(--red-deep)}
+  .btn.ghost:hover{border-color:var(--red);color:var(--red)}
+  .hero-art{position:relative}
+  .hero-art img{width:100%;max-width:440px;margin:0 auto;display:block;
+    filter:drop-shadow(0 0 40px rgba(212,43,30,.28))}
+
+  /* STAT STRIP */
+  .stats{border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin-top:40px}
+  .stats .wrap{display:grid;grid-template-columns:repeat(4,1fr)}
+  .stat{padding:26px 8px;border-right:1px solid var(--line)}
+  .stat:last-child{border-right:none}
+  .stat b{font-family:"Playfair Display",serif;font-size:34px;color:var(--gold);display:block}
+  .stat span{font-size:10.5px;letter-spacing:.2em;color:var(--mute);text-transform:uppercase}
+  @media(max-width:720px){.stats .wrap{grid-template-columns:repeat(2,1fr)}
+    .stat:nth-child(2){border-right:none}}
+
+  /* SECTION */
+  section{padding:84px 0}
+  .sec-head{margin-bottom:44px}
+  .sec-head h2{font-size:clamp(30px,5vw,56px);font-weight:800;line-height:1;letter-spacing:-.01em}
+  .sec-head p{margin-top:14px;color:var(--mute);max-width:560px;font-size:13.5px;line-height:1.7}
+
+  /* ROSTER */
+  .roster{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
+  @media(max-width:760px){.roster{grid-template-columns:1fr}}
+  .unit{background:var(--panel);border:1px solid var(--line);padding:28px;position:relative;
+    transition:.25s;overflow:hidden}
+  .unit:hover{border-color:var(--red);transform:translateY(-3px)}
+  .unit::before{content:"";position:absolute;top:0;left:0;width:3px;height:100%;background:var(--red)}
+  .unit .code{font-size:10px;letter-spacing:.24em;color:var(--gold)}
+  .unit h3{font-family:"Playfair Display",serif;font-size:30px;font-weight:700;margin:6px 0 4px}
+  .unit .role{font-size:12px;color:var(--red);letter-spacing:.1em;text-transform:uppercase;margin-bottom:14px}
+  .unit p{font-size:13px;color:#c4c1bb;line-height:1.65}
+  .unit .meta{margin-top:16px;display:flex;gap:8px;flex-wrap:wrap}
+  .chip{font-size:10px;letter-spacing:.1em;padding:5px 9px;border:1px solid var(--line);
+    color:var(--mute);text-transform:uppercase}
+  .status{position:absolute;top:24px;right:24px;font-size:10px;letter-spacing:.16em;
+    display:flex;align-items:center;gap:6px;text-transform:uppercase}
+  .dot{width:8px;height:8px;border-radius:50%}
+  .live .dot{background:#38d66b;box-shadow:0 0 8px #38d66b}
+  .live{color:#38d66b}
+  .beta .dot{background:var(--gold);box-shadow:0 0 8px var(--gold)}
+  .beta{color:var(--gold)}
+
+  /* ROADMAP */
+  .tracks{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+  @media(max-width:860px){.tracks{grid-template-columns:1fr}}
+  .track{background:var(--panel);border:1px solid var(--line);padding:26px}
+  .track h4{font-size:13px;letter-spacing:.16em;text-transform:uppercase;margin-bottom:4px}
+  .track .prov{font-size:10.5px;color:var(--mute);letter-spacing:.14em;margin-bottom:22px}
+  .track.hermes h4{color:var(--red)}
+  .track.claude h4{color:var(--gold)}
+  .track.grok h4{color:#7cc7ff}
+  .step{position:relative;padding:0 0 22px 24px;border-left:1px solid var(--line);margin-left:5px}
+  .step:last-child{border-left:1px solid transparent;padding-bottom:0}
+  .step::before{content:"";position:absolute;left:-5px;top:2px;width:9px;height:9px;border-radius:50%;
+    background:var(--ink);border:2px solid var(--mute)}
+  .step.done::before{background:#38d66b;border-color:#38d66b}
+  .step.active::before{background:var(--gold);border-color:var(--gold);box-shadow:0 0 8px var(--gold)}
+  .step .st{font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--mute)}
+  .step.done .st{color:#38d66b}.step.active .st{color:var(--gold)}
+  .step h5{font-size:13.5px;font-weight:700;margin:3px 0 3px}
+  .step p{font-size:12px;color:#b3b0aa;line-height:1.55}
+
+  /* STACK STRIP */
+  .stack{background:var(--paper);color:var(--ink)}
+  .stack .sec-head h2{color:var(--ink)}
+  .stack .sec-head p{color:#55524c}
+  .stack-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:#d9d4c9;border:1px solid #d9d4c9}
+  @media(max-width:760px){.stack-grid{grid-template-columns:1fr}}
+  .cell{background:var(--paper);padding:26px}
+  .cell .n{font-family:"Playfair Display",serif;font-size:22px;color:var(--red);font-weight:700}
+  .cell h6{font-size:12px;letter-spacing:.16em;text-transform:uppercase;margin:10px 0 6px}
+  .cell p{font-size:12.5px;color:#57534c;line-height:1.6}
+
+  /* WORDMARK */
+  .wordmark{text-align:center;padding:60px 0 30px;overflow:hidden}
+  .wordmark h2{font-family:"Playfair Display",serif;font-weight:900;
+    font-size:clamp(70px,20vw,260px);line-height:.8;letter-spacing:-.02em;
+    color:transparent;-webkit-text-stroke:1.5px var(--red);white-space:nowrap}
+
+  footer{border-top:1px solid var(--line);padding:40px 0}
+  footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:16px;
+    font-size:11px;letter-spacing:.14em;color:var(--mute);text-transform:uppercase}
+  footer a:hover{color:var(--red)}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <div class="brand"><span class="reactor"></span>STARK&#8209;NET</div>
+    <div class="nav-links">
+      <a href="#roster">Roster</a>
+      <a href="#roadmap">Roadmap</a>
+      <a href="#stack">Stack</a>
+      <a href="https://github.com/aravind-tronix/stark-net">GitHub</a>
+    </div>
+  </div>
+</nav>
+
+<header>
+  <div class="wrap hero-grid">
+    <div>
+      <span class="tag">OPEN BUILD &bull; STATUS BOARD</span>
+      <h1 class="hero serif">THE <em>STARK</em><br/>AI ROSTER</h1>
+      <p class="sub">A live development dashboard for a personal AI ecosystem — one flagship agent and its specialised units, built on <b>Hermes</b> and evolving across a <b>Claude</b> and <b>Grok</b> MCP roadmap. Sometimes you gotta run before you can walk.</p>
+      <div class="cta">
+        <a class="btn primary" href="#roster">VIEW ROSTER &rarr;</a>
+        <a class="btn ghost" href="#roadmap">MCP ROADMAP</a>
+      </div>
+    </div>
+    <div class="hero-art">
+      <img src="assets/hero.png" alt="Iron Man marble bust with arc reactor" />
+    </div>
+  </div>
+</header>
+
+<div class="stats">
+  <div class="wrap">
+    <div class="stat"><b>4</b><span>AI Units</span></div>
+    <div class="stat"><b>2</b><span>MCP Providers</span></div>
+    <div class="stat"><b>1</b><span>Shared Memory</span></div>
+    <div class="stat"><b>&#8734;</b><span>Skills Growing</span></div>
+  </div>
+</div>
+
+<!-- ROSTER -->
+<section id="roster">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="mono-label">// 01 — THE ROSTER</span>
+      <h2 class="serif">Units Online</h2>
+      <p>Four AI units, each named after a Stark-lab intelligence. One shared memory fabric, distinct roles. Personal configuration and credentials are never exposed here — only capabilities.</p>
+    </div>
+    <div class="roster">
+
+      <div class="unit">
+        <div class="status live"><span class="dot"></span>Live</div>
+        <div class="code">UNIT-01</div>
+        <h3 class="serif">JARVIS</h3>
+        <div class="role">Flagship Agent</div>
+        <p>The primary brain. A pragmatic senior-engineer agent running on Hermes, handling coding, systems, research and day-to-day automation. Verifies its own work with real tool output — plans dressed as progress don't count.</p>
+        <div class="meta"><span class="chip">Hermes Core</span><span class="chip">Claude MCP</span><span class="chip">Server-hosted</span></div>
+      </div>
+
+      <div class="unit">
+        <div class="status live"><span class="dot"></span>Live</div>
+        <div class="code">UNIT-02</div>
+        <h3 class="serif">EDITH</h3>
+        <div class="role">Knowledge Agent</div>
+        <p>A dedicated long-memory unit with its own profile, chat interface and always-on service. Continuously fed a curated knowledge base and tuned for recall and legacy context rather than hands-on system work.</p>
+        <div class="meta"><span class="chip">Own Profile</span><span class="chip">Dedicated Bot</span><span class="chip">Knowledge Base</span></div>
+      </div>
+
+      <div class="unit">
+        <div class="status beta"><span class="dot"></span>Edge Node</div>
+        <div class="code">UNIT-03</div>
+        <h3 class="serif">FRIDAY</h3>
+        <div class="role">Mobile Workstation</div>
+        <p>A remote worker node on a secure private mesh. Extends the roster onto a portable machine for on-device file, shell and process tasks — invoked deliberately, isolated from the core by design.</p>
+        <div class="meta"><span class="chip">Mesh Network</span><span class="chip">Remote Shell</span><span class="chip">On-Demand</span></div>
+      </div>
+
+      <div class="unit">
+        <div class="status beta"><span class="dot"></span>Hardware</div>
+        <div class="code">UNIT-04</div>
+        <h3 class="serif">DUMMY</h3>
+        <div class="role">Lab Robotics</div>
+        <p>The physical helper of the lab — a real robot integrated through a custom control SDK. Bridges the software roster into the physical world for status, tasking and autonomous routines.</p>
+        <div class="meta"><span class="chip">Robotics SDK</span><span class="chip">Physical World</span><span class="chip">Autonomous</span></div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ROADMAP -->
+<section id="roadmap" style="background:var(--ink-2);border-top:1px solid var(--line);border-bottom:1px solid var(--line)">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="mono-label">// 02 — DEVELOPMENT STAGE</span>
+      <h2 class="serif">The MCP Roadmap</h2>
+      <p>Where the build stands across three parallel tracks: the Hermes agent core, the Claude MCP integration, and the Grok MCP integration. Green = shipped, gold = in progress, hollow = planned.</p>
+    </div>
+    <div class="tracks">
+
+      <div class="track hermes">
+        <h4>Hermes Core</h4>
+        <div class="prov">AGENT RUNTIME</div>
+        <div class="step done"><div class="st">Shipped</div><h5>Agent Runtime</h5><p>Jarvis live on Hermes with tools, terminal and skills.</p></div>
+        <div class="step done"><div class="st">Shipped</div><h5>Persistent Memory</h5><p>Cross-session memory + holographic fact store online.</p></div>
+        <div class="step done"><div class="st">Shipped</div><h5>Multi-Unit Profiles</h5><p>EDITH split into its own isolated profile + gateway.</p></div>
+        <div class="step active"><div class="st">In Progress</div><h5>Skill Library</h5><p>Growing procedural memory across domains, auto-curated.</p></div>
+        <div class="step"><div class="st">Planned</div><h5>Unified Control Plane</h5><p>Single dashboard to observe and command every unit.</p></div>
+      </div>
+
+      <div class="track claude">
+        <h4>Claude MCP</h4>
+        <div class="prov">ANTHROPIC</div>
+        <div class="step done"><div class="st">Shipped</div><h5>Core Reasoning</h5><p>Claude as the primary reasoning engine for Jarvis.</p></div>
+        <div class="step done"><div class="st">Shipped</div><h5>Tool + Terminal MCP</h5><p>Full tool-use: files, shell, browser, vision, delegation.</p></div>
+        <div class="step active"><div class="st">In Progress</div><h5>Remote Node MCP</h5><p>Friday wired in as an opt-in MCP target over the mesh.</p></div>
+        <div class="step active"><div class="st">In Progress</div><h5>Robotics MCP</h5><p>Dummy control surfaced through a custom SDK bridge.</p></div>
+        <div class="step"><div class="st">Planned</div><h5>Sub-Agent Fleets</h5><p>Parallel Claude sub-agents for isolated workstreams.</p></div>
+      </div>
+
+      <div class="track grok">
+        <h4>Grok MCP</h4>
+        <div class="prov">xAI</div>
+        <div class="step done"><div class="st">Shipped</div><h5>X / Live Search</h5><p>Real-time X search + web signal via Grok tools.</p></div>
+        <div class="step active"><div class="st">In Progress</div><h5>Second-Opinion Engine</h5><p>Grok as a cross-check reasoner alongside Claude.</p></div>
+        <div class="step"><div class="st">Planned</div><h5>Realtime Feeds MCP</h5><p>Streaming market/news signals into the roster.</p></div>
+        <div class="step"><div class="st">Planned</div><h5>Vision + Media MCP</h5><p>Grok vision for image/video understanding tasks.</p></div>
+        <div class="step"><div class="st">Planned</div><h5>Model Routing</h5><p>Auto-route tasks to Claude or Grok by strength.</p></div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- STACK -->
+<section id="stack" class="stack">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="mono-label">// 03 — HOW IT'S BUILT</span>
+      <h2 class="serif">The Stack</h2>
+      <p>Public-facing architecture. No credentials, addresses or personal data — just the shape of the system.</p>
+    </div>
+    <div class="stack-grid">
+      <div class="cell"><div class="n">01</div><h6>Hermes Runtime</h6><p>The agent framework hosting every unit — tools, terminal, skills and scheduling in one loop.</p></div>
+      <div class="cell"><div class="n">02</div><h6>Claude + Grok</h6><p>Dual-provider brains via MCP. Claude drives reasoning and tool-use; Grok adds live search and cross-checks.</p></div>
+      <div class="cell"><div class="n">03</div><h6>Shared Memory</h6><p>Persistent cross-session memory and a holographic fact store with trust scoring.</p></div>
+      <div class="cell"><div class="n">04</div><h6>Secure Mesh</h6><p>Private encrypted network linking the core to edge nodes like Friday, on demand.</p></div>
+      <div class="cell"><div class="n">05</div><h6>Robotics Bridge</h6><p>A custom SDK exposing physical hardware (Dummy) as a first-class unit.</p></div>
+      <div class="cell"><div class="n">06</div><h6>Skills Engine</h6><p>Reusable, self-curating procedures that grow the roster's capability over time.</p></div>
+    </div>
+  </div>
+</section>
+
+<div class="wordmark"><h2 class="serif">STARK&#8209;NET</h2></div>
+
+<footer>
+  <div class="wrap">
+    <div>STARK&#8209;NET &bull; STATUS BOARD</div>
+    <div>BUILT ON HERMES &bull; CLAUDE + GROK MCP</div>
+    <div><a href="https://github.com/aravind-tronix/stark-net">GITHUB &rarr;</a></div>
+  </div>
+</footer>
+
+</body>
+</html>
